@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "sample.mohamed.ratesconverter"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        buildConfigField "String", 'BASE_URL', '"https://hiring.revolut.codes/api/android/"'
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies { configuration ->
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
+
+    androidxComponents(configuration)
+    testingComponents(configuration)
+    multidexComponent(configuration)
+    daggerComponents(configuration)
+    androidRxComponents(configuration)
+    networkComponents(configuration)
+}
+
+private static void androidxComponents(configuration) {
+    configuration.implementation 'androidx.appcompat:appcompat:1.1.0'
+    configuration.implementation 'androidx.core:core-ktx:1.0.2'
+    configuration.implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    configuration.implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    configuration.implementation 'androidx.emoji:emoji:1.0.0'
+    configuration.implementation 'androidx.emoji:emoji-bundled:1.0.0'
+    configuration.androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    configuration.androidTestImplementation 'androidx.test:rules:1.1.1'
+}
+
+private static void testingComponents(configuration) {
+    configuration.testImplementation 'junit:junit:4.12'
+    configuration.androidTestImplementation 'androidx.test:runner:1.2.0'
+    configuration.testImplementation 'android.arch.core:core-testing:1.0.0-alpha3'
+    configuration.testImplementation 'org.mockito:mockito-inline:2.8.47'
+    configuration.testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3'
+    configuration.testImplementation 'org.json:json:20140107'
+    configuration.androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    configuration.implementation 'androidx.test.espresso:espresso-idling-resource:3.1.1'
+}
+
+private static void multidexComponent(configuration) {
+    configuration.implementation 'com.android.support:multidex:1.0.3'
+}
+
+private static void daggerComponents(configuration) {
+    def daggerVersion = '2.11'
+    configuration.implementation "com.google.dagger:dagger:$daggerVersion"
+    configuration.implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    configuration.kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    configuration.kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+}
+
+private static void androidRxComponents(configuration) {
+    configuration.implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    configuration.implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    configuration.implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
+}
+
+private static void networkComponents(configuration) {
+    configuration.implementation 'com.google.code.gson:gson:2.8.5'
+
+    def retrofitVersion = '2.6.0'
+    configuration.implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    configuration.implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    configuration.implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+}
