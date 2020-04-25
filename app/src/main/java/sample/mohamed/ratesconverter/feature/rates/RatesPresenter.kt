@@ -15,6 +15,7 @@ class RatesPresenter @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
     private var rates: Rates? = null
+    private var baseCurrencyCode = "EUR"
     private var isNewCurrencySelected = false
 
     private lateinit var ratesView: RatesView
@@ -24,7 +25,7 @@ class RatesPresenter @Inject constructor(
     }
 
     fun init() {
-        loadRates("EUR")
+        loadRates(baseCurrencyCode)
     }
 
     fun loadRates(baseCurrency: String) {
@@ -50,6 +51,7 @@ class RatesPresenter @Inject constructor(
     fun onRatesItemClicked(currencyCode: String) {
         compositeDisposable.clear()
         isNewCurrencySelected = true
+        baseCurrencyCode = currencyCode
         loadRates(currencyCode)
         ratesView.scrollToFirstItem()
     }
@@ -59,6 +61,7 @@ class RatesPresenter @Inject constructor(
             compositeDisposable.clear()
         } else {
             isNewCurrencySelected = false
+            baseCurrencyCode = currencyCode
             loadRates(currencyCode)
         }
     }
@@ -70,6 +73,10 @@ class RatesPresenter @Inject constructor(
         }
         ratesView.bindRates(rates!!.rateList)
     }
+
+    fun onRestart() = loadRates(baseCurrencyCode)
+
+    fun onPause() = compositeDisposable.clear()
 
     override fun onSuccess(data: Rates) {
         ratesView.hideProgress()

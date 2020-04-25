@@ -33,6 +33,16 @@ class RatesActivity : AppCompatActivity(), RatesView {
         initPresenter()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        presenter.onRestart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onPause()
+    }
+
     private fun initRatesRecyclerView() = ratesRecyclerView.apply {
         layoutManager = LinearLayoutManager(this@RatesActivity, RecyclerView.VERTICAL, false)
         adapter = RatesAdapter()
