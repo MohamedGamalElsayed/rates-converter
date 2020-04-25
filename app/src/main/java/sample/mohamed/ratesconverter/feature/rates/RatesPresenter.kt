@@ -17,6 +17,7 @@ class RatesPresenter @Inject constructor(
     private var rates: Rates? = null
     private var baseCurrencyCode = "EUR"
     private var isNewCurrencySelected = false
+    private var isInEditMode = false
 
     private lateinit var ratesView: RatesView
 
@@ -51,6 +52,7 @@ class RatesPresenter @Inject constructor(
     fun onRatesItemClicked(currencyCode: String) {
         compositeDisposable.clear()
         isNewCurrencySelected = true
+        isInEditMode = false
         baseCurrencyCode = currencyCode
         loadRates(currencyCode)
         ratesView.scrollToFirstItem()
@@ -58,6 +60,7 @@ class RatesPresenter @Inject constructor(
 
     fun onRatesItemValueFocusChanged(hasFocus: Boolean, currencyCode: String) {
         if (hasFocus) {
+            isInEditMode = true
             compositeDisposable.clear()
         } else {
             isNewCurrencySelected = false
@@ -74,7 +77,9 @@ class RatesPresenter @Inject constructor(
         ratesView.bindRates(rates!!.rateList)
     }
 
-    fun onRestart() = loadRates(baseCurrencyCode)
+    fun onRestart() {
+        if (!isInEditMode) loadRates(baseCurrencyCode)
+    }
 
     fun onPause() = compositeDisposable.clear()
 
